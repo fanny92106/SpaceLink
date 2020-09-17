@@ -1,9 +1,22 @@
 import React, {Component} from 'react';
-import {Button, List, Avatar, Checkbox, Spin} from 'antd';
+import {Button, List, Avatar, Checkbox, Spin, Slider} from 'antd';
 import starlinkLogo from '../assets/images/Satellite.svg';
 
 
 class SatelliteList extends Component {
+    constructor(){
+        super();
+        this.state = {
+            duration: 0,
+        }
+    }
+
+    onChangeDuration = (value) => {
+        this.setState({
+            duration: value
+        })
+    }
+
     onChange = e =>{
         const {dataInfo, checked} = e.target;
         this.props.onSelectionChange(dataInfo, checked);
@@ -11,6 +24,20 @@ class SatelliteList extends Component {
 
     render() {
         const satList = this.props.satInfo ? this.props.satInfo :[];
+        const marks = {
+            0: {
+                style:{
+                    color: '#69c0ff',
+                },
+                label: <strong>0</strong>
+            },
+            10: {
+                style:{
+                    color: '#69c0ff',
+                },
+                label: <strong>10</strong>
+            },
+        }
 
         return (
             <div className="sat-list-box">
@@ -18,9 +45,20 @@ class SatelliteList extends Component {
                     className="sat-list-btn"
                     size="large"
                     disabled={this.props.disableTrack}
-                    onClick={()=> this.props.trackOnclick()}
+                    onClick={()=> this.props.trackOnclick(this.state.duration)}
                     >
-                        Track on the map</Button>
+                        Track on the map
+                </Button>
+                <div className="list-item">
+                    <Slider className="slider"
+                        marks={marks}
+                        min={0}
+                        max={10}
+                        defaultValue={0}
+                        onChange={this.onChangeDuration}
+                    />
+                    <label>Track Duration</label>
+                </div>
                 <hr/>
                 {
                     this.props.loading?

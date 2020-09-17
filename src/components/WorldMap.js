@@ -5,6 +5,8 @@ import {geoKavrayskiy7} from 'd3-geo-projection';
 import {geoGraticule, geoPath} from 'd3-geo';
 import {select as d3Select} from 'd3-selection';
 import {WORLD_MAP_URL} from "../constant";
+import {Spin} from 'antd';
+
 
 const width = 960;
 const height = 600;
@@ -54,7 +56,9 @@ class WorldMap extends Component {
             path(ele);
             context.fill();
             context.stroke();
+        })
 
+        for (let temp=1; temp<15; temp++) {
             // draw the graticule
             context.strokeStyle = 'rgba(220, 220, 220, 0.1)';
             context.beginPath();
@@ -68,13 +72,19 @@ class WorldMap extends Component {
             context.lineWidth = 0.5;
             path(graticule.outline());
             context.stroke();
-        })
+        }
     }
 
     render(){
         return (
             <div className="map-box">
                 <canvas className="map" ref={this.refMap} />
+                <canvas className="track" ref={this.props.refTrack}/>
+                <div className="hint"></div>
+                {
+                    (this.props.loading) ?
+                    <Spin tip="Loading..." /> :  <></>
+                }
             </div>
         )
     }
